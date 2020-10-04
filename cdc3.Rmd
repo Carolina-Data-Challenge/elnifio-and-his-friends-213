@@ -1,0 +1,147 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+air_d_da.pm25=air_d_da[air_d_da[,6] == 'pm25',]
+
+air_d_da.pm25plot = ggplot(aes(x = time, y = value), colour = "blue", data = air_d_da.pm25)+geom_point(colour = "#4FB0C6") 
+air_d_da.mean_pm25 = sum(air_d_da.pm25$value)/nrow(air_d_da.pm25)
+air_d_da.mean_pm25
+air_d_da.pm25plot=air_d_da.pm25plot + geom_hline(yintercept=air_d_da.mean_pm25)
+air_d_da.pm25plot
+```
+
+```{r}
+air_d_da.mean_pm25_hourly = list()
+
+i=1
+while(i<25) {
+ temp=air_d_da.pm25[air_d_da.pm25[,9] == (i-1),]
+ air_d_da.mean_pm25_hourly[i] = sum(temp$value)/nrow(temp)
+ i=i+1
+}
+
+air_d_da.mean_pm25_hourly
+```
+
+
+```{r}
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[1])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (0),])
+
+
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[2])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (1),])
+
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[3])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (2),])
+
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[4])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (3),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[5])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (4),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[6])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (5),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[7])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (6),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[8])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (7),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[9])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (8),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[10])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (9),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[11])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (10),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[12])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (11),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[13])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (12),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[14])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (13),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[15])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (14),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[16])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (15),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[17])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (16),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[18])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (17),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[19])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (18),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[20])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (19),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[21])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (20),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[22])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (21),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[23])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (22),])
+air_d_da.pm25plot = air_d_da.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_pm25_hourly[24])), colour="blue", data = air_d_da.pm25[air_d_da.pm25[,9] == (23),])+ggtitle("hourly pm25 in durham arnory, durham")
+
+air_d_da.pm25plot
+```
+
+
+```{r}
+air_d_bc.pm25=air_d_bc[air_d_bc[,6] == 'pm25',]
+
+air_d_bc.pm25plot = ggplot(aes(x = time, y = value), colour = "blue", data = air_d_bc.pm25)+geom_point(colour = "#4FB0C6") 
+air_d_bc.mean_pm25 = sum(air_d_bc.pm25$value)/nrow(air_d_bc.pm25)
+air_d_bc.mean_pm25
+air_d_bc.pm25plot=air_d_bc.pm25plot + geom_hline(yintercept=air_d_bc.mean_pm25)
+air_d_bc.pm25plot
+```
+```{r}
+air_d_bc.pm25=air_d_bc.pm25[air_d_bc.pm25[, 7] <65,]
+
+air_d_bc.pm25plot = ggplot(aes(x = time, y = value), colour = "blue", data = air_d_bc.pm25)+geom_point(colour = "#4FB0C6") 
+air_d_bc.mean_pm25 = sum(air_d_bc.pm25$value)/nrow(air_d_bc.pm25)
+air_d_bc.mean_pm25
+air_d_bc.pm25plot=air_d_bc.pm25plot + geom_hline(yintercept=air_d_bc.mean_pm25)
+air_d_bc.pm25plot
+```
+
+
+
+
+```{r}
+air_d_bc.mean_pm25_hourly = list()
+
+i=1
+while(i<25) {
+ temp=air_d_bc.pm25[air_d_bc.pm25[,9] == (i-1),]
+ air_d_bc.mean_pm25_hourly[i] = sum(temp$value)/nrow(temp)
+ i=i+1
+}
+
+air_d_bc.mean_pm25_hourly
+```
+
+
+
+
+```{r}
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[1])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (0),])
+
+
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[2])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (1),])
+
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[3])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (2),])
+
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[4])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (3),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[5])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (4),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[6])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (5),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[7])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (6),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[8])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (7),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[9])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (8),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[10])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (9),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[11])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (10),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[12])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (11),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[13])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (12),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[14])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (13),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[15])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (14),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[16])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (15),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[17])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (16),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[18])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (17),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[19])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (18),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[20])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (19),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[21])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (20),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[22])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (21),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[23])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (22),])
+air_d_bc.pm25plot = air_d_bc.pm25plot + geom_point(aes(x=time, y=as.numeric(air_d_bc.mean_pm25_hourly[24])), colour="blue", data = air_d_bc.pm25[air_d_bc.pm25[,9] == (23),])+ggtitle("hourly pm25 in burdens creek, durham")
+
+air_d_bc.pm25plot
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

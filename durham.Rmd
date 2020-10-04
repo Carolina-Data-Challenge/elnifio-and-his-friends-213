@@ -1,0 +1,50 @@
+---
+title: "Durham"
+output: html_document
+---
+```{r}
+df = read.csv("OpenAQDurham.csv")
+```
+
+
+```{r}
+require(dplyr)
+summary(df)
+date = as.Date(df$utc)
+month = strftime(date,"%Y/%m")
+df = cbind(df, date)
+df = cbind(df, month)
+```
+
+```{r}
+bc = df[df$location == "Burdens Creek",]
+bc = bc[, -c(2,3,9:11)]
+bc.pm10 = bc[bc$parameter == "pm10",]
+bc.bc$value = scale(bc.bc$value, center = TRUE, scale = TRUE)
+bc.co = bc[bc$parameter == "co",]
+bc.co$value = scale(bc.co$value, center = TRUE, scale = TRUE)
+bc.no2 = bc[bc$parameter == "no2",]
+bc.no2$value = scale(bc.no2$value, center = TRUE, scale = TRUE)
+bc.o3 = bc[bc$parameter == "o3",]
+bc.o3$value = scale(bc.o3$value, center = TRUE, scale = TRUE)
+bc.pm25 = bc[bc$parameter == "pm25",]
+bc.pm25$value = scale(bc.pm25$value, center = TRUE, scale = TRUE)
+bc.so2 = bc[bc$parameter == "so2",]
+bc.so2$value = scale(bc.so2$value, center = TRUE, scale = TRUE)
+
+bc.pm10.day=bc.pm10 %>% group_by(date)%>%summarize(daymean=mean(value))
+bc.co.day=bc.co %>% group_by(date)%>%summarize(daymean=mean(value))
+bc.no2.day=bc.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+bc.o3.day=bc.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+bc.pm25.day=bc.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+bc.so2.day=bc.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+par(mfrow=c(2,2)) 
+plot(bc.co.day$date, bc.co.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "co", main = "BC.co")
+plot(bc.no2.day$date, bc.no2.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "no2", main = "BC.no2")
+plot(bc.o3.day$date, bc.o3.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "o3", main = "BC.o3")
+plot(bc.pm25.day$date, bc.pm25.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "pm25", main = "BC.pm25")
+plot(bc.pm10.day$date, bc.pm10.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "pm10", main = "BC.pm10")
+
+```
+

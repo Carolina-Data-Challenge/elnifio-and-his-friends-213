@@ -1,0 +1,264 @@
+---
+title: "SF"
+author: "Yiyao Qu"
+date: "10/4/2020"
+output: html_document
+---
+
+```{r}
+sf = read.csv("OpenAQSanFran.csv")
+
+require(dplyr)
+by_location <- sf %>% group_by(location) %>% summarise(num = n())
+
+bc.mean = tapply(sf$parameter == "bc", sf$location, mean)
+bc.mean
+
+co.mean = tapply(sf$parameter == "co", sf$location, mean)
+co.mean
+
+no2.mean = tapply(sf$parameter == "no2", sf$location, mean)
+no2.mean
+
+o3.mean = tapply(sf$parameter == "o3", sf$location, mean)
+o3.mean
+
+pm25.mean = tapply(sf$parameter == "pm25", sf$location, mean)
+pm25.mean
+
+so2.mean = tapply(sf$parameter == "so2", sf$location, mean)
+so2.mean
+
+summary(sf)
+date = as.Date(sf$utc)
+month = strftime(date,"%Y/%m")
+sf = cbind(sf, date)
+sf = cbind(sf, month)
+
+bi = sf[sf$location == "Bethel Island",]
+bi = bi[, -c(2,3,9:11)]
+bi.bc = bi[bi$parameter == "bc",]
+bi.bc$value = scale(bi.bc$value, center = TRUE, scale = TRUE)
+bi.co = bi[bi$parameter == "co",]
+bi.co$value = scale(bi.co$value, center = TRUE, scale = TRUE)
+bi.no2 = bi[bi$parameter == "no2",]
+bi.no2$value = scale(bi.no2$value, center = TRUE, scale = TRUE)
+bi.o3 = bi[bi$parameter == "o3",]
+bi.o3$value = scale(bi.o3$value, center = TRUE, scale = TRUE)
+bi.pm25 = bi[bi$parameter == "pm25",]
+bi.pm25$value = scale(bi.pm25$value, center = TRUE, scale = TRUE)
+bi.so2 = bi[bi$parameter == "so2",]
+bi.so2$value = scale(bi.so2$value, center = TRUE, scale = TRUE)
+
+bi.bc.day=bi.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+bi.co.day=bi.co %>% group_by(date)%>%summarize(daymean=mean(value))
+bi.no2.day=bi.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+bi.o3.day=bi.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+bi.pm25.day=bi.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+bi.so2.day=bi.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+par(mfrow=c(2,2)) 
+plot(bi.co.day$date, bi.co.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "co", main = "BI.co")
+plot(bi.no2.day$date, bi.no2.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "no2", main = "BI.no2")
+plot(bi.o3.day$date, bi.o3.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "o3", main = "BI.o3")
+plot(bi.so2.day$date, bi.so2.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "so2", main = "BI.so2")
+
+##################
+
+concord = sf[sf$location == "Concord",]
+concord = concord[, -c(2,3,9:11)]
+concord.bc = concord[concord$parameter == "bc",]
+concord.co = concord[concord$parameter == "co",]
+concord.no2 = concord[concord$parameter == "no2",]
+concord.o3 = concord[concord$parameter == "o3",]
+concord.pm25 = concord[concord$parameter == "pm25",]
+concord.so2 = concord[concord$parameter == "so2",]
+
+concord.bc.day=concord.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+concord.co.day=concord.co %>% group_by(date)%>%summarize(daymean=mean(value))
+concord.no2.day=concord.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+concord.o3.day=concord.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+concord.pm25.day=concord.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+concord.so2.day=concord.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+which.max(concord.so2.day$daymean > 0.003)
+concord.so2.day$daymean[28] = (concord.so2.day$daymean[27]+concord.so2.day$daymean[29])/2
+
+par(mfrow=c(2,2)) 
+plot(concord.co.day$date, concord.co.day$daymean, type="o", col="brown", pch="o", lty=1, xlab = "Date", ylab = "co", main = "Concord.co")
+plot(concord.no2.day$date, concord.no2.day$daymean, type="o", col="brown", pch="o", lty=1, xlab = "Date", ylab = "no2", main = "Concord.no2")
+plot(concord.o3.day$date, concord.o3.day$daymean, type="o", col="brown", pch="o", lty=1, xlab = "Date", ylab = "o3", main = "Concord.o3")
+#plot(concord.pm25.day$date, concord.pm25.day$daymean, type="o", col="blue", pch="o", lty=1, xlab = "Date", ylab = "pm25", main = "Concord.pm25")
+plot(concord.so2.day$date, concord.so2.day$daymean, type="o", col="brown", pch="o", lty=1, xlab = "Date", ylab = "so2", main = "Concord.so2")
+
+##############
+lc = sf[sf$location == "Laney College",]
+lc = lc[, -c(2,3,9:11)]
+lc.bc = lc[lc$parameter == "bc",]
+lc.bc$value = scale(lc.bc$value, center = TRUE, scale = TRUE)
+lc.co = lc[lc$parameter == "co",]
+lc.co$value = scale(lc.co$value, center = TRUE, scale = TRUE)
+lc.no2 = lc[lc$parameter == "no2",]
+lc.no2$value = scale(lc.no2$value, center = TRUE, scale = TRUE)
+lc.o3 = lc[lc$parameter == "o3",]
+lc.o3$value = scale(lc.o3$value, center = TRUE, scale = TRUE)
+lc.pm25 = lc[lc$parameter == "pm25",]
+lc.pm25$value = scale(lc.pm25$value, center = TRUE, scale = TRUE)
+lc.so2 = lc[lc$parameter == "so2",]
+lc.so2$value = scale(lc.so2$value, center = TRUE, scale = TRUE)
+
+lc.bc.day=lc.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+lc.co.day=lc.co %>% group_by(date)%>%summarize(daymean=mean(value))
+lc.no2.day=lc.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+lc.o3.day=lc.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+lc.pm25.day=lc.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+lc.so2.day=lc.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+par(mfrow=c(2,2)) 
+plot(lc.bc.day$date, lc.bc.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(lc.co.day$date, lc.co.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(lc.no2.day$date, lc.no2.day$daymean, type="o", col="blue", pch="o", lty=1)
+# plot(lc.o3.day$date, lc.o3.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(lc.pm25.day$date, lc.pm25.day$daymean, type="o", col="blue", pch="o", lty=1)
+# plot(lc.so2.day$date, lc.so2.day$daymean, type="o", col="blue", pch="o", lty=1)
+##############
+
+
+lr = sf[sf$location == "Livermore - Rincon",]
+lr = lr[, -c(2,3,9:11)]
+lr.bc = lr[lr$parameter == "bc",]
+lr.bc$value = scale(lr.bc$value, center = TRUE, scale = TRUE)
+lr.co = lr[lr$parameter == "co",]
+lr.co$value = scale(lr.co$value, center = TRUE, scale = TRUE)
+lr.no2 = lr[lr$parameter == "no2",]
+lr.no2$value = scale(lr.no2$value, center = TRUE, scale = TRUE)
+lr.o3 = lr[lr$parameter == "o3",]
+lr.o3$value = scale(lr.o3$value, center = TRUE, scale = TRUE)
+lr.pm25 = lr[lr$parameter == "pm25",]
+lr.pm25$value = scale(lr.pm25$value, center = TRUE, scale = TRUE)
+lr.so2 = lr[lr$parameter == "so2",]
+lr.so2$value = scale(lr.so2$value, center = TRUE, scale = TRUE)
+
+lr.bc.day=lr.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+lr.co.day=lr.co %>% group_by(date)%>%summarize(daymean=mean(value))
+lr.no2.day=lr.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+lr.o3.day=lr.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+lr.pm25.day=lr.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+lr.so2.day=lr.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+ok = sf[sf$location == "Oakland",]
+ok = ok[, -c(2,3,9:11)]
+ok.bc = ok[ok$parameter == "bc",]
+ok.bc$value = scale(ok.bc$value, center = TRUE, scale = TRUE)
+ok.co = ok[ok$parameter == "co",]
+ok.co$value = scale(ok.co$value, center = TRUE, scale = TRUE)
+ok.no2 = ok[ok$parameter == "no2",]
+ok.no2$value = scale(ok.no2$value, center = TRUE, scale = TRUE)
+ok.o3 = ok[ok$parameter == "o3",]
+ok.o3$value = scale(ok.o3$value, center = TRUE, scale = TRUE)
+ok.pm25 = ok[ok$parameter == "pm25",]
+ok.pm25$value = scale(ok.pm25$value, center = TRUE, scale = TRUE)
+ok.so2 = ok[ok$parameter == "so2",]
+
+ok.bc.day=ok.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+ok.co.day=ok.co %>% group_by(date)%>%summarize(daymean=mean(value))
+ok.no2.day=ok.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+ok.o3.day=ok.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+ok.pm25.day=ok.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+ok.so2.day=ok.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+okw = sf[sf$location == "Oakland West",]
+okw = okw[, -c(2,3,9:11)]
+okw.bc = okw[okw$parameter == "bc",]
+okw.bc$value = scale(okw.bc$value, center = TRUE, scale = TRUE)
+okw.co = okw[okw$parameter == "co",]
+okw.co$value = scale(okw.co$value, center = TRUE, scale = TRUE)
+okw.no2 = okw[okw$parameter == "no2",]
+okw.no2$value = scale(okw.no2$value, center = TRUE, scale = TRUE)
+okw.o3 = ok[okw$parameter == "o3",]
+okw.o3$value = scale(okw.o3$value, center = TRUE, scale = TRUE)
+okw.pm25 = ok[okw$parameter == "pm25",]
+okw.pm25$value = scale(okw.pm25$value, center = TRUE, scale = TRUE)
+okw.so2 = ok[okw$parameter == "so2",]
+okw.so2$value = scale(okw.so2$value, center = TRUE, scale = TRUE)
+
+okw.bc.day=okw.bc %>% group_by(date)%>%summarize(daymean=mean(value))
+okw.co.day=okw.co %>% group_by(date)%>%summarize(daymean=mean(value))
+okw.no2.day=okw.no2 %>% group_by(date)%>%summarize(daymean=mean(value))
+okw.o3.day=okw.o3 %>% group_by(date)%>%summarize(daymean=mean(value))
+okw.pm25.day=okw.pm25 %>% group_by(date)%>%summarize(daymean=mean(value))
+okw.so2.day=okw.so2 %>% group_by(date)%>%summarize(daymean=mean(value))
+
+par(mfrow=c(2,2)) 
+plot(lc.pm25.day$date, lc.pm25.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(lr.pm25.day$date, lr.pm25.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(ok.pm25.day$date, ok.pm25.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(okw.pm25.day$date, okw.pm25.day$daymean, type="o", col="blue", pch="o", lty=1)
+
+par(mfrow=c(2,2)) 
+plot(lc.no2.day$date, lc.no2.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(lr.no2.day$date, lr.no2.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(ok.no2.day$date, ok.no2.day$daymean, type="o", col="blue", pch="o", lty=1)
+plot(okw.no2.day$date, okw.no2.day$daymean, type="o", col="blue", pch="o", lty=1)
+
+
+# lr 
+plot(lr.no2.day$date, lr.no2.day$daymean, type="l", col="blue", lty=1, ylim=c(-3,3), main="Livermore - Rincon Parameters", xlab = "Date", ylab = "Magnitude")
+#points(lr.bc.day$date, lr.bc.day$daymean, col="red", pch="*")
+lines(lr.bc.day$date, lr.bc.day$daymean, col="red", lty=2)
+#points(lr.o3.day$date, lr.o3.day$daymean, col="dark red", pch="+")
+lines(lr.o3.day$date, lr.o3.day$daymean, col="dark red", lty=2)
+#points(lr.pm25.day$date, lr.pm25.day$daymean, col="green", pch="-")
+lines(lr.pm25.day$date, lr.pm25.day$daymean, col="green", lty=2)
+legend("topleft", c("no2","bc","o3","pm25"), fill=c("blue","red","dark red", "green"))
+
+# lc 
+plot(lc.no2.day$date, lc.no2.day$daymean, type="l", col="blue", lty=1, ylim=c(-2,4), main="Laney College Parameters", xlab = "Date", ylab = "Magnitude")
+lines(lc.bc.day$date, lc.bc.day$daymean, col="red", lty=2)
+lines(lc.co.day$date, lc.co.day$daymean, col="yellow", lty=2)
+lines(lc.pm25.day$date, lc.pm25.day$daymean, col="green", lty=2)
+legend("topleft", c("no2","bc","co","pm25"), fill=c("blue","red","yellow", "green"))
+
+# ok
+plot(ok.no2.day$date, ok.no2.day$daymean, type="l", col="blue", lty=1, ylim=c(-2,4), main="Oakland Parameters", xlab = "Date", ylab = "Magnitude")
+lines(ok.o3.day$date, ok.o3.day$daymean, col="dark red", lty=2)
+lines(ok.co.day$date, ok.co.day$daymean, col="yellow", lty=2)
+lines(ok.pm25.day$date, ok.pm25.day$daymean, col="green", lty=2)
+legend("topleft", c("no2","o3","co","pm25"), fill=c("blue","dark red","yellow", "green"))
+
+# okw
+plot(okw.no2.day$date, okw.no2.day$daymean, type="l", col="blue", lty=1, ylim=c(-2,4), main="Oakland West Parameters", xlab = "Date", ylab = "Magnitude")
+lines(okw.o3.day$date, okw.o3.day$daymean, col="dark red", lty=2)
+lines(okw.co.day$date, okw.co.day$daymean, col="yellow", lty=2)
+lines(okw.pm25.day$date, okw.pm25.day$daymean, col="green", lty=2)
+lines(okw.bc.day$date, okw.bc.day$daymean, col="red", lty=2)
+lines(okw.so2.day$date, okw.so2.day$daymean, col="orange", lty=2)
+legend("topleft", c("no2","o3","co","pm25","bc","so2"), fill=c("blue","dark red","yellow", "green","red","orange"))
+
+##### Potential time series analysis
+#d1=diff(bi.co$value) 
+#logd1=diff(log(bi.co$value)) 
+#sd1=diff(sqrt(bi.co$value))
+
+#par(mfrow=c(3,1)) 
+#plot(d1,type='l',xlab='Time',ylab='Difference',main='First Degree
+#Differencing on Raw Data') 
+#plot(logd1,type='l',xlab='Time',ylab='Difference',main='First
+#Degree Differencing on Logged Data') 
+#plot(sd1,type='l',xlab='Time',ylab='Difference',main='First
+#Degree Differencing on Square-root Data')
+
+#bi.no2 = bi[bi$parameter == "no2",]
+#bi.o3 = bi[bi$parameter == "o3",]
+#bi.so2 = bi[bi$parameter == "so2",]
+
+#d1=diff(price$Close) 
+#logd1=diff(log(price$Close)) 
+#sd1=diff(sqrt(price$Close))
+
+#par(mfrow=c(2,1))
+#acf(sd1,main='Autocorrelation Function of the First Differences') 
+#pacf(sd1,main='Partial Autocorrelation Function of the First Differences')
+
+```
+

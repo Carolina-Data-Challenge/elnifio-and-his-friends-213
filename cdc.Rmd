@@ -1,0 +1,299 @@
+---
+title: "Untitled"
+output: html_document
+---
+```{r}
+library(readxl)
+air_bi <- read_excel("D:/R-data/air_bi.xlsx")
+View(air_bi)
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(air_bi, aes(local, value, colour = parameter)) + geom_point() + geom_smooth(method = "lm", formula = y ~ x, se = FALSE)
+
+```
+
+```{r}
+library(stringr)
+air_d_bu <- read_excel("D:/R-data/air_d_bu.xlsx")
+
+air_d_bu$date = as.Date(air_d_bu$local)
+air_d_bu$time <- format(as.POSIXct(air_d_bu$local,format="%Y-%m-%dT%H:%M:%S"),"%H")
+air_d_bu$time = str_remove(air_d_bu$time, "^0")
+air_d_bu$month = format(as.POSIXct(air_d_bu$local,format="%Y-%m-%dT%H:%M:%S"),"%m")
+
+```
+
+
+```{r}
+air_d_bu.o3plot = ggplot(aes(x = time, y = value, colour = parameter), data = air_d_bu) + geom_line()
+air_d_bu.mean_o3 = sum(air_d_bu$value)/5351
+air_d_bu.mean_o3
+air_d_bu.o3plot + geom_hline(yintercept=0.03027565)
+
+
+#library(default)
+#sum_o3_hourly = list()
+#num_o3_hourly = vector("list", length = 24)
+#i=0
+#while(i<24){num_o3_hourly[i] = 0}
+
+```
+
+
+
+```{r}
+
+air_d_bu.mean_o3_hourly = list()
+
+i=1
+while(i<25) {
+ temp=air_d_bu[air_d_bu[,9] == (i-1),]
+ air_d_bu.mean_o3_hourly[i] = sum(temp$value)/nrow(temp)
+ i=i+1
+  }
+
+air_d_bu.mean_o3_hourly
+```
+
+```{r}
+
+air_d_bu$time= as.numeric(air_d_bu$time)
+```
+
+```{r}
+air_d_bu.o3plot = ggplot(aes(x = time, y = value, colour = parameter), data = air_d_bu) + geom_point(colour = "#FF9999") 
+
+air_d_bu.mean_o3 = sum(air_d_bu$value)/5351
+air_d_bu.mean_o3
+
+air_d_bu.o3plot=air_d_bu.o3plot + geom_hline(yintercept=0.03027565)
+air_d_bu.o3plot
+```
+```{r}
+plot = names(air_d_bu)
+plot
+air_d_bu.o3plot = ggplot(aes(x = time, y = value, colour = parameter), data = air_d_bu) + geom_line()
+
+air_d_bu.mean_o3 = sum(air_d_bu$value)/5351
+air_d_bu.mean_o3
+
+air_d_bu.o3plot=air_d_bu.o3plot + geom_hline(yintercept=0.03027565)
+
+#air_d_bu.o3plot+geom_point(aes(mean_o3_hourly))
+
+i=1
+while(i<=23) {  
+ air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(mean_o3_hourly[i+1])), colour="blue", data = air_d_bu[air_d_bu[,9] == (i),])
+air_d_bu.o3plot
+i=i+1
+}
+
+air_d_bu.o3plot
+```
+
+
+```{r}
+air_d_bu.o3plot = ggplot(aes(x = time, y = value, colour = parameter), data = air_d_bu) + geom_point(colour = "#FF9999") 
+
+air_d_bu.mean_o3 = sum(air_d_bu$value)/5351
+air_d_bu.mean_o3
+
+air_d_bu.o3plot=air_d_bu.o3plot + geom_hline(yintercept=0.03027565)
+
+#air_d_bu.o3plot+geom_point(aes(mean_o3_hourly))
+
+#i=1
+#while(i<24) {  
+# air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(mean_o3_hourly[i+1])), colour="blue", data = air_d_bu[air_d_bu[,9] == (i),])
+#air_d_bu.o3plot
+# i=i+1
+#}
+
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[1])), colour="blue", data = air_d_bu[air_d_bu[,9] == (0),])
+
+
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[2])), colour="blue", data = air_d_bu[air_d_bu[,9] == (1),])
+
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[3])), colour="blue", data = air_d_bu[air_d_bu[,9] == (2),])
+
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[4])), colour="blue", data = air_d_bu[air_d_bu[,9] == (3),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[5])), colour="blue", data = air_d_bu[air_d_bu[,9] == (4),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[6])), colour="blue", data = air_d_bu[air_d_bu[,9] == (5),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[7])), colour="blue", data = air_d_bu[air_d_bu[,9] == (6),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[8])), colour="blue", data = air_d_bu[air_d_bu[,9] == (7),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[9])), colour="blue", data = air_d_bu[air_d_bu[,9] == (8),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[10])), colour="blue", data = air_d_bu[air_d_bu[,9] == (9),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[11])), colour="blue", data = air_d_bu[air_d_bu[,9] == (10),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[12])), colour="blue", data = air_d_bu[air_d_bu[,9] == (11),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[13])), colour="blue", data = air_d_bu[air_d_bu[,9] == (12),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[14])), colour="blue", data = air_d_bu[air_d_bu[,9] == (13),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[15])), colour="blue", data = air_d_bu[air_d_bu[,9] == (14),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[16])), colour="blue", data = air_d_bu[air_d_bu[,9] == (15),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[17])), colour="blue", data = air_d_bu[air_d_bu[,9] == (16),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[18])), colour="blue", data = air_d_bu[air_d_bu[,9] == (17),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[19])), colour="blue", data = air_d_bu[air_d_bu[,9] == (18),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[20])), colour="blue", data = air_d_bu[air_d_bu[,9] == (19),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[21])), colour="blue", data = air_d_bu[air_d_bu[,9] == (20),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[22])), colour="blue", data = air_d_bu[air_d_bu[,9] == (21),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[23])), colour="blue", data = air_d_bu[air_d_bu[,9] == (22),])
+air_d_bu.o3plot = air_d_bu.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_bu.mean_o3_hourly[24])), colour="blue", data = air_d_bu[air_d_bu[,9] == (23),])
+
+
+air_d_bu.o3plot = air_d_bu.o3plot+ggtitle("hourly o3 in bushyfrk, durham")
+air_d_bu.o3plot
+
+```
+这个图是durham的BUSHYFRK，每小时的o3排放量
+
+
+
+
+
+```{r}
+air_d_da <- read_excel("D:/R-data/air_d_da.xlsx")
+air_d_da$date = as.Date(air_d_da$local)
+air_d_da$time <- format(as.POSIXct(air_d_da$local,format="%Y-%m-%dT%H:%M:%S"),"%H")
+air_d_da$time = str_remove(air_d_da$time, "^0")
+air_d_da$time= as.numeric(air_d_da$time)
+
+air_d_da.o3=air_d_da[air_d_da[,6] == 'o3',]
+
+air_d_da.o3plot = ggplot(aes(x = time, y = value, colour = 'pink'), data = air_d_da.o3)  + geom_point(colour = "#FF9999") 
+air_d_da.mean_o3 = sum(air_d_da.o3$value)/nrow(air_d_da.o3)
+air_d_da.mean_o3
+air_d_da.o3plot=air_d_da.o3plot + geom_hline(yintercept=air_d_da.mean_o3)
+air_d_da.o3plot
+```
+
+```{r}
+air_d_da.mean_o3_hourly = list()
+
+i=1
+while(i<25) {
+ temp=air_d_da.o3[air_d_da.o3[,9] == (i-1),]
+ air_d_da.mean_o3_hourly[i] = sum(temp$value)/nrow(temp)
+ i=i+1
+}
+
+air_d_da.mean_o3_hourly
+```
+
+```{r}
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[1])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (0),])
+
+
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[2])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (1),])
+
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[3])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (2),])
+
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[4])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (3),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[5])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (4),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[6])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (5),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[7])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (6),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[8])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (7),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[9])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (8),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[10])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (9),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[11])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (10),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[12])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (11),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[13])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (12),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[14])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (13),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[15])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (14),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[16])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (15),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[17])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (16),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[18])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (17),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[19])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (18),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[20])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (19),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[21])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (20),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[22])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (21),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[23])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (22),])
+air_d_da.o3plot = air_d_da.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_da.mean_o3_hourly[24])), colour="blue", data = air_d_da.o3[air_d_da.o3[,9] == (23),])+ggtitle("hourly o3 in durham arnory, durham")
+
+air_d_da.o3plot
+```
+
+
+
+
+```{r}
+air_d_bc <- read_excel("D:/R-data/air_d_bc.xlsx")
+air_d_bc$date = as.Date(air_d_bc$local)
+air_d_bc$time <- format(as.POSIXct(air_d_bc$local,format="%Y-%m-%dT%H:%M:%S"),"%H")
+air_d_bc$time = str_remove(air_d_bc$time, "^0")
+air_d_bc$time= as.numeric(air_d_bc$time)
+
+air_d_dc.o3=air_d_bc[air_d_bc[,6] == 'o3',]
+
+air_d_dc.o3plot = ggplot(aes(x = time, y = value, colour = 'pink'), data = air_d_dc.o3)  + geom_point(colour = "#FF9999") 
+air_d_bc.mean_o3 = sum(air_d_dc.o3$value)/nrow(air_d_dc.o3)
+air_d_bc.mean_o3
+air_d_dc.o3plot=air_d_dc.o3plot + geom_hline(yintercept=air_d_da.mean_o3)
+air_d_dc.o3plot
+```
+```{r}
+air_d_dc.mean_o3_hourly = list()
+
+i=1
+while(i<25) {
+ temp=air_d_bc.o3[air_d_bc.o3[,9] == (i-1),]
+ air_d_dc.mean_o3_hourly[i] = sum(temp$value)/nrow(temp)
+ i=i+1
+}
+
+air_d_dc.mean_o3_hourly
+```
+
+```{r}
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[1])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (0),])
+
+
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[2])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (1),])
+
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[3])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (2),])
+
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[4])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (3),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[5])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (4),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[6])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (5),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[7])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (6),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[8])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (7),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[9])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (8),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[10])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (9),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[11])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (10),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[12])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (11),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[13])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (12),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[14])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (13),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[15])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (14),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[16])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (15),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[17])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (16),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[18])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (17),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[19])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (18),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[20])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (19),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[21])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (20),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[22])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (21),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[23])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (22),])
+air_d_dc.o3plot = air_d_dc.o3plot + geom_point(aes(x=time, y=as.numeric(air_d_dc.mean_o3_hourly[24])), colour="blue", data = air_d_dc.o3[air_d_dc.o3[,9] == (23),])+ggtitle("hourly o3 in burdens creek, durham")
+
+air_d_dc.o3plot
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
